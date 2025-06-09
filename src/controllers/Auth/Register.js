@@ -1,10 +1,7 @@
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
-import baseUser from '../../models/NewUser.model.js';
-import Client from '../../models/Client.model.js';
-import Agent from '../../models/Agent.model.js';
-import Agency from '../../models/Agency.model.js';
 import Admin from '../../models/Admin.model.js';
+import Student from '../../models/Student.model.js';
 
 export const registerUser = async (req, res) => {
     try {
@@ -14,7 +11,7 @@ export const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
 
 
-        const existingUser = await baseUser.findOne({ email });
+        const existingUser = await Student.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: 'User is already registered' });
         }
@@ -22,20 +19,20 @@ export const registerUser = async (req, res) => {
         let newUser;
 
         switch (user_type) {
-            case 'client':
-                newUser = new Client({ email, password: hashedPassword, ...userData });
+            case 'student':
+                newUser = new Student({ email, password: hashedPassword, ...userData });
                 break;
 
-            case 'agent':
-                newUser = new Agent({ email, password: hashedPassword, ...userData });
-                break;
-
-            case 'agency':
-                newUser = new Agency({ email, password: hashedPassword, ...userData });
+            case 'faculty':
+                newUser = new Faculty({ email, password: hashedPassword, ...userData });
                 break;
 
             case 'admin':
                 newUser = new Admin({ email, password: hashedPassword, ...userData });
+                break;
+
+            case 'super admin':
+                newUser = new SuperAdmin({ email, password: hashedPassword, ...userData });
                 break;
 
             default:

@@ -7,14 +7,14 @@ export const VerifyAdmin = (req, res, next) => {
             return res.status(401).json({ message: "Unauthorized access. No user found." });
         }
 
-        // Check if the user is an admin
-        if (user.user_type !== "admin") {
-            return res.status(403).json({ message: "Forbidden. You do not have admin access." });
+        // Check if the user is a super admin
+        if (user.user_type !== "super admin") {
+            return res.status(403).json({ message: "Forbidden. You do not have super admin access." });
         }
 
         next();
     } catch (error) {
-        console.error("Error verifying admin:", error.message);
+        console.error("Error verifying super admin:", error.message);
         return res.status(500).json({ message: "Internal server error." });
     }
 }

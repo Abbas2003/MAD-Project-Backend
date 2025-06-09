@@ -1,7 +1,7 @@
 import "dotenv/config";
 import jwt from "jsonwebtoken";
 import sendResponse from "../helpers/sendResponse.js";
-import baseUser from "../models/NewUser.model.js";
+import Student from "../models/Student.model.js";
 
 const verifyToken = async (req, res, next) => {
     try {
@@ -15,7 +15,7 @@ const verifyToken = async (req, res, next) => {
         const decoded = jwt.verify(bearerToken, process.env.JWT_SECRET);
         
         if (decoded) {
-            const user = await baseUser.findById(decoded.id).lean();
+            const user = await Student.findById(decoded.id).lean();
             if (!user) return sendResponse(res, 401, null, true, "User not found.");
             
             req.user = decoded;

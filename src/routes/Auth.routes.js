@@ -1,5 +1,5 @@
 import express from 'express';
-import { loginUser } from '../controllers/User/User.controller.js';
+import { loginUser } from '../controllers/Auth/Login.js';
 import { registerUser } from '../controllers/Auth/Register.js';
 import { verifyEmail } from '../controllers/Auth/VerifyEmail.js';
 import { resendVerificationToken } from '../controllers/Auth/ResendVerificationToken.js';
