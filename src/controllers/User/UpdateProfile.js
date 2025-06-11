@@ -5,7 +5,7 @@ import cloudinary from "../../utils/cloudinary.js";
 export const updateProfile = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user_type = req.user.user_type; // 'agent', 'agency', 'client', 'admin'
+        const user_type = req.user.user_type; 
 
         // console.log('User type:', user_type, 'User ID:', userId);
         // console.log("Rating:", parseFloat(req.body.rating));

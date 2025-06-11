@@ -64,7 +64,7 @@ router.post('/login', loginUser);
  *                 example: Doe
  *               user_type:
  *                 type: string
- *                 example: client
+ *                 example: user
  *               email:
  *                 type: string
  *                 example: user@example.com

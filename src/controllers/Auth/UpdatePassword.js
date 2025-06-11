@@ -1,5 +1,5 @@
 import sendResponse from "../../helpers/sendResponse.js";
-import baseUser from "../../models/NewUser.model.js";
+import User from "../../models/User.model.js";
 import bcrypt from "bcryptjs";
 
 
@@ -10,7 +10,7 @@ export const updatePassword = async (req, res) => {
 
 
         // Find the user by ID
-        const user = await baseUser.findById(userId).select('+password');
+        const user = await User.findById(userId).select('+password');
         if (!user) {
             return sendResponse(res, 404, null, true, 'User not found');
         }

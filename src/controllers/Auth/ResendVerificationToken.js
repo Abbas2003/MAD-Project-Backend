@@ -1,13 +1,13 @@
 import sendResponse from '../../helpers/sendResponse.js';
-import baseUser from '../../models/NewUser.model.js';
 import nodemailer from 'nodemailer';
+import User from '../../models/User.model.js';
 
 export const resendVerificationToken = async (req, res) => {
     try {
         const { email } = req.body;
 
         // Check if the user exists
-        const user = await baseUser.findOne({ email });
+        const user = await User.findOne({ email });
         if (!user) {
             return sendResponse(res, 404, null, true, 'User not found');
         }

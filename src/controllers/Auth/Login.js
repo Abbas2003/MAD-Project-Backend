@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import sendResponse from "../../helpers/sendResponse.js";
-import Student from "../../models/Student.model.js";
+import User from "../../models/User.model.js";
 dotenv.config();
 
 export const loginUser = async (req, res) => {
@@ -19,7 +19,7 @@ export const loginUser = async (req, res) => {
 
 
         // Check if user exists
-        const user = await Student.findOne({ email }).select('+password');
+        const user = await User.findOne({ email }).select('+password');
         
         if (!user) return sendResponse(res, 400, null, true, "User does not exist with this email");
         

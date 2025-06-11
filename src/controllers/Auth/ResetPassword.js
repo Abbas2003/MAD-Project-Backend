@@ -1,5 +1,5 @@
 import sendResponse from "../../helpers/sendResponse.js";
-import baseUser from "../../models/NewUser.model.js";
+import User from "../../models/User.model.js";
 import bcrypt from "bcryptjs";
 
 
@@ -13,7 +13,7 @@ export const resetPassword = async (req, res) => {
     
 
     // Find user by password reset token
-    const user = await baseUser.findOne({ passwordResetToken: token });
+    const user = await User.findOne({ passwordResetToken: token });
     if (!user) return sendResponse(res, 400, null, true, "Invalid password reset token");
 
     // Check if token has expired

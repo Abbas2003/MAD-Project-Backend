@@ -1,7 +1,10 @@
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
 import Admin from '../../models/Admin.model.js';
-import Student from '../../models/Student.model.js';
+import Student from '../../models/User.model.js';
+import User from '../../models/User.model.js';
+import Faculty from '../../models/Faculty.model.js';
+import SuperAdmin from '../../models/SuperAdmin.model.js';
 
 export const registerUser = async (req, res) => {
     try {
@@ -11,7 +14,7 @@ export const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
 
 
-        const existingUser = await Student.findOne({ email });
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: 'User is already registered' });
         }
@@ -19,6 +22,10 @@ export const registerUser = async (req, res) => {
         let newUser;
 
         switch (user_type) {
+            case 'user':
+                newUser = new User({ email, password: hashedPassword, ...userData });
+                break;
+
             case 'student':
                 newUser = new Student({ email, password: hashedPassword, ...userData });
                 break;

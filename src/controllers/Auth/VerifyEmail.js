@@ -1,10 +1,10 @@
-import baseUser from '../../models/NewUser.model.js';
+import User from '../../models/User.model.js';
 
 export const verifyEmail = async (req, res) => {
     try {
         const { email, token } = req.body;
 
-        const user = await baseUser.findOne({ email });
+        const user = await User.findOne({ email });
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });

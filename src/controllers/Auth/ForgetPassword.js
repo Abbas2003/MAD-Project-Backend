@@ -1,5 +1,5 @@
 import sendResponse from "../../helpers/sendResponse.js";
-import baseUser from "../../models/NewUser.model.js";
+import User from "../../models/User.model.js";
 import nodemailer from 'nodemailer';
 import dotenv from "dotenv";
 dotenv.config();
@@ -10,7 +10,7 @@ export const forgetPassword = async (req, res) => {
     console.log("Forget Password Email:", email);
 
     // Check if user exists
-    const user = await baseUser.findOne({ email });
+    const user = await User.findOne({ email });
     if (!user) return sendResponse(res, 400, null, true, "User does not exist with this email");
 
     // Generate password reset token

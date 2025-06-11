@@ -1,7 +1,7 @@
 import "dotenv/config";
 import jwt from "jsonwebtoken";
 import sendResponse from "../helpers/sendResponse.js";
-import Student from "../models/Student.model.js";
+import Student from "../models/User.model.js";
 
 const verifyToken = async (req, res, next) => {
     try {
