@@ -4,6 +4,7 @@ import upload from '../utils/multer.js';
 import { updateProfile } from '../controllers/User/UpdateProfile.js';
 import { getUserById } from '../controllers/User/SpecificUser.js';
 import { updatePassword } from '../controllers/Auth/UpdatePassword.js';
+import { addCourses } from '../controllers/User/AddCourses.js';
 
 
 
@@ -20,7 +21,7 @@ const router = express.Router();
  * @swagger
  * /api/v1/user/update-profile:
  *   put:
- *     summary: Update the profile of the logged-in user
+ *     summary: Update only first name, last name, and profile image of the logged-in user
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -34,37 +35,22 @@ const router = express.Router();
  *               firstName:
  *                 type: string
  *                 example: John
+ *                 description: Must be a non-empty string.
  *               lastName:
  *                 type: string
  *                 example: Doe
+ *                 description: Must be a non-empty string.
  *               profileImage:
  *                 type: string
  *                 format: binary
- *               # Student-specific fields
- *               courses:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["Math", "Science"]
- *               studentId:
- *                 type: string
- *                 example: "STU123"
- *               semester:
- *                 type: string
- *                 enum: [1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th]
- *                 example: "3rd"
- *               cgpa:
- *                 type: string
- *                 example: "3.8"
- *               # Faculty-specific fields
- *               department:
- *                 type: string
- *                 example: "Computer Science"
+ *                 description: Profile image file.
  *     responses:
  *       200:
  *         description: Profile updated successfully
  *       404:
  *         description: User profile not updated
+ *       400:
+ *         description: Validation error
  *       401:
  *         description: Unauthorized access
  *       500:
@@ -129,6 +115,44 @@ router.get('/get-user-profile/:id', verifyToken, getUserById);
  *         description: Unauthorized access
  */
 router.put('/update-password', verifyToken, updatePassword);
+
+/**
+ * @swagger
+ * /api/v1/user/add-courses:
+ *   put:
+ *     summary: Add courses to the logged-in student user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               courses:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["Math", "Physics"]
+ *                 description: Must be a non-empty array of non-empty strings.
+ *     responses:
+ *       200:
+ *         description: Courses added successfully
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized access
+ *       403:
+ *         description: Only students can add courses
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.put('/add-courses', verifyToken, addCourses);
+
 
 
 export default router;
