@@ -62,7 +62,7 @@ router.post('/login', loginUser);
  *               lastName:
  *                 type: string
  *                 example: Doe
- *               user_type:
+ *               role:
  *                 type: string
  *                 example: user
  *               email:
