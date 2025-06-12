@@ -5,6 +5,7 @@ import { updateProfile } from '../controllers/User/UpdateProfile.js';
 import { getUserById } from '../controllers/User/SpecificUser.js';
 import { updatePassword } from '../controllers/Auth/UpdatePassword.js';
 import { addCourses } from '../controllers/User/AddCourses.js';
+import { addStudentDetails } from '../controllers/User/StudentDetails.js';
 
 
 
@@ -16,6 +17,7 @@ const router = express.Router();
  *   name: Users
  *   description: API for managing user-related operations
  */
+
 
 /**
  * @swagger
@@ -58,6 +60,7 @@ const router = express.Router();
  */
 router.put('/update-profile', verifyToken, upload.single('profileImage'), updateProfile);
 
+
 /**
  * @swagger
  * /api/v1/user/get-user-profile/{id}:
@@ -84,6 +87,7 @@ router.put('/update-profile', verifyToken, upload.single('profileImage'), update
  *         description: Server error
  */
 router.get('/get-user-profile/:id', verifyToken, getUserById);
+
 
 /**
  * @swagger
@@ -115,6 +119,7 @@ router.get('/get-user-profile/:id', verifyToken, getUserById);
  *         description: Unauthorized access
  */
 router.put('/update-password', verifyToken, updatePassword);
+
 
 /**
  * @swagger
@@ -152,6 +157,54 @@ router.put('/update-password', verifyToken, updatePassword);
  *         description: Server error
  */
 router.put('/add-courses', verifyToken, addCourses);
+
+/**
+ * @swagger
+ * /api/v1/user/add-student-details:
+ *   put:
+ *     summary: Add or update student details for the logged-in student user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               studentId:
+ *                 type: string
+ *                 example: CSC22F091
+ *                 description: Must be a non-empty string.
+ *               department:
+ *                 type: string
+ *                 example: Computer Science
+ *                 description: Must be a non-empty string.
+ *               cgpa:
+ *                 type: string
+ *                 example: "3.0"
+ *                 description: Must be a non-empty string.
+ *               semester:
+ *                 type: string
+ *                 enum: [1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th]
+ *                 example: "3rd"
+ *                 description: Must be one of the allowed values.
+ *     responses:
+ *       200:
+ *         description: Student details added/updated successfully
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized access
+ *       403:
+ *         description: Only students can add student details
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.put('/add-student-details', verifyToken, addStudentDetails);
 
 
 
