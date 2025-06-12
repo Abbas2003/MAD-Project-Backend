@@ -8,8 +8,8 @@ export const VerifyAdmin = (req, res, next) => {
         }
 
         // Check if the user is a super admin
-        if (user.user_type !== "super admin") {
-            return res.status(403).json({ message: "Forbidden. You do not have super admin access." });
+        if (user.user_type !== "super admin" || user?.user_type !== "admin") {
+            return res.status(403).json({ message: "Forbidden. You do not have Super Admin/Admin access." });
         }
 
         next();
