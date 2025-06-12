@@ -6,7 +6,7 @@ export const addCourses = async (req, res) => {
         const userId = req.user.id;
 
         // Only students can add courses
-        if (req.user.role !== "student") {
+        if (req.user.user_type !== "student") {
             return sendResponse(res, 403, null, true, "Only students can add courses.");
         }
 
