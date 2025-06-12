@@ -8,6 +8,7 @@ import { addCourses } from '../controllers/User/AddCourses.js';
 import { addStudentDetails } from '../controllers/User/StudentDetails.js';
 import { getAllStudents } from '../controllers/User/GetAllStudents.js';
 import { VerifyAdmin } from '../middlewares/CheckAdmin.js';
+import { getAllFaculty } from '../controllers/User/GetAllFaculty.js';
 
 
 
@@ -227,5 +228,37 @@ router.put('/add-student-details', verifyToken, addStudentDetails);
  */
 router.get('/all-students', verifyToken, VerifyAdmin, getAllStudents);
 
+/**
+ * @swagger
+ * /api/v1/user/all-faculty:
+ *   get:
+ *     summary: Get all faculty from the database
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: All faculty fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: All faculty fetched successfully.
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized access
+ *       500:
+ *         description: Server error
+ */
+router.get('/all-faculty', verifyToken, VerifyAdmin, getAllFaculty);
 
 export default router;
