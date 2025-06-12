@@ -17,6 +17,8 @@ const verifyToken = async (req, res, next) => {
         if (decoded) {
             const user = await Student.findById(decoded.id).lean();
             if (!user) return sendResponse(res, 401, null, true, "User not found.");
+
+            if(user.isVerified == false) return sendResponse(res, 401, null, true, "User not verified.");
             
             req.user = decoded;
             next();

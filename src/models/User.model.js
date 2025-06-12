@@ -42,6 +42,23 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    courses: [String],
+    studentId: {
+        type: String,
+        unique: true,
+        sparse: true, // Allows for null values without enforcing uniqueness
+        trim: true
+    },
+    semester: {
+        type: String,
+        enum: ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'],
+    },
+    cgpa: {
+        type: String,
+    },
+    department: {
+        type: String,
+    },
     verificationToken: String,
     verificationTokenExpires: Date,
     passwordResetToken: String,

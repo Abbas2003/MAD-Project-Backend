@@ -1,90 +1,71 @@
 import sendResponse from "../../helpers/sendResponse.js";
-import baseUser from "../../models/NewUser.model.js";
 import cloudinary from "../../utils/cloudinary.js";
+import User from "../../models/User.model.js";
 
 export const updateProfile = async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const user_type = req.user.user_type; 
+    // try {
+    //     const userId = req.user.id;
+    //     const role = req.user.role;
 
-        // console.log('User type:', user_type, 'User ID:', userId);
-        // console.log("Rating:", parseFloat(req.body.rating));
-        
-        if (req.body.rating && (req.body.rating < 0 || req.body.rating > 5)) {
-            return sendResponse(res, 400, null, true, 'Rating must be between 0 and 5');
-        }
+    //     // Common fields for all users
+    //     const commonFields = {
+    //         firstName: req.body.firstName,
+    //         lastName: req.body.lastName,
+    //         profileImage: req.body.profileImage,
+    //     };
 
-        // Parse JSON fields only if they are strings
-        const socialLinks = typeof req.body.socialLinks === 'string'
-            ? JSON.parse(req.body.socialLinks)
-            : req.body.socialLinks;
+    //     // Handle profile image upload
+    //     if (req.file) {
+    //         const result = await cloudinary.uploader.upload(req.file.path, {
+    //             folder: 'profile_images',
+    //             public_id: `user_${userId}`,
+    //             overwrite: true
+    //         });
+    //         commonFields.profileImage = result.secure_url;
+    //     }
 
+    //     let updatedUser;
 
-        const commonFields = {
-            nickname: req.body.nickname,
-            tagline: req.body.tagline,
-            description: req.body.description,
-            rating: req.body.rating ? parseFloat(req.body.rating) : 0,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-        };
+    //     if (role === "student") {
+    //         // Student-specific fields
+    //         const studentFields = {
+    //             courses: req.body.courses, // array of strings
+    //             studentId: req.body.studentId,
+    //             semester: req.body.semester,
+    //             cgpa: req.body.cgpa
+    //         };
+    //         updatedUser = await Student.findByIdAndUpdate(
+    //             userId,
+    //             { $set: { ...commonFields, ...studentFields } },
+    //             { new: true, runValidators: true }
+    //         );
+    //     } else if (role === "faculty") {
+    //         // Faculty-specific fields
+    //         const facultyFields = {
+    //             department: req.body.department
+    //         };
+    //         updatedUser = await Faculty.findByIdAndUpdate(
+    //             userId,
+    //             { $set: { ...commonFields, ...facultyFields } },
+    //             { new: true, runValidators: true }
+    //         );
+    //     } else {
+    //         // For admin, super admin, user (base User model)
+    //         updatedUser = await User.findByIdAndUpdate(
+    //             userId,
+    //             { $set: commonFields },
+    //             { new: true, runValidators: true }
+    //         );
+    //     }
 
-        const extraFieldsByType = {};
+    //     if (!updatedUser) {
+    //         return sendResponse(res, 404, null, true, 'User profile not updated');
+    //     }
 
-        if (user_type == 'agent' || user_type == 'agency') {
-            Object.assign(extraFieldsByType, {
-                memberOfMNEF: req.body.memberOfMNEF,
-                phoneNumber: req.body.phoneNumber,
-                officeAddress: req.body.officeAddress,
-                experienceYears: req.body.experienceYears ? parseInt(req.body.experienceYears, 10) : undefined,
-                companyRegistrationNumber: req.body.companyRegistrationNumber,
-                zipCode: req.body.zipCode,
-                profileVisits: req.body.profileVisits ? parseInt(req.body.profileVisits, 10) : undefined,
-            });
-        }
-
-        const updateFields = { ...commonFields, ...extraFieldsByType };
-
-        // Handle merging of socialLinks
-        if (socialLinks) {
-            const user = await baseUser.findById(userId).select('socialLinks');
-            if (user && user.socialLinks) {
-                updateFields.socialLinks = { ...user.socialLinks.toObject(), ...socialLinks };
-            } else {
-                updateFields.socialLinks = socialLinks;
-            }
-        }
-
-        // Handle profile image upload
-        if (req.file) {
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                folder: 'profile_images',
-                public_id: `user_${userId}`,
-                overwrite: true
-            });
-            updateFields.profileImage = result.secure_url; // Save the Cloudinary URL
-        }
-
-        // Log the fields being updated for debugging
-        // console.log('Update Fields:', updateFields);
-
-        const updatedUser = await baseUser.findByIdAndUpdate(
-            userId,
-            { $set: updateFields },
-            { new: true, runValidators: true }
-        );
-
-
-        // console.log('Updated User:', updatedUser?.rating);
-
-        if (!updatedUser) {
-            return sendResponse(res, 404, null, true, 'User profile not updated');
-        }
-
-        return sendResponse(res, 200, updatedUser, false, 'Profile updated successfully');
-    } catch (error) {
-        console.error('Update Profile Error:', error);
-        return sendResponse(res, 500, null, true, 'Server Error');
-    }
+    //     return sendResponse(res, 200, updatedUser, false, 'Profile updated successfully');
+    // } catch (error) {
+    //     console.error('Update Profile Error:', error);
+    //     return sendResponse(res, 500, null, true, 'Server Error');
+    // }
 };
 

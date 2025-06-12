@@ -1,14 +1,10 @@
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
-import Admin from '../../models/Admin.model.js';
-import Student from '../../models/User.model.js';
 import User from '../../models/User.model.js';
-import Faculty from '../../models/Faculty.model.js';
-import SuperAdmin from '../../models/SuperAdmin.model.js';
 
 export const registerUser = async (req, res) => {
     try {
-        const { user_type, email, password, ...userData } = req.body;
+        const { role, email, password, firstName, lastName } = req.body;
 
         // Hash the password using bcrypt
         const hashedPassword = await bcrypt.hash(password, 12);
@@ -19,32 +15,8 @@ export const registerUser = async (req, res) => {
             return res.status(400).json({ error: 'User is already registered' });
         }
 
-        let newUser;
-
-        switch (user_type) {
-            case 'user':
-                newUser = new User({ email, password: hashedPassword, ...userData });
-                break;
-
-            case 'student':
-                newUser = new Student({ email, password: hashedPassword, ...userData });
-                break;
-
-            case 'faculty':
-                newUser = new Faculty({ email, password: hashedPassword, ...userData });
-                break;
-
-            case 'admin':
-                newUser = new Admin({ email, password: hashedPassword, ...userData });
-                break;
-
-            case 'super admin':
-                newUser = new SuperAdmin({ email, password: hashedPassword, ...userData });
-                break;
-
-            default:
-                return res.status(400).json({ error: 'Invalid user_type provided' });
-        }
+        
+        let newUser = new User({ email, password: hashedPassword, role, firstName, lastName });
 
         // Generate verification token
         const verificationToken = newUser.createVerificationToken();
@@ -68,7 +40,7 @@ export const registerUser = async (req, res) => {
 
         await transporter.sendMail(mailOptions);
 
-        res.status(201).json({ message: `${user_type} registered successfully. Please check your email for verification`, userId: newUser._id });
+        res.status(201).json({ message: `${role} registered successfully. Please check your email for verification`, userId: newUser._id });
 
     } catch (error) {
         console.error('Register error:', error);

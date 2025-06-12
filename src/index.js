@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import setupSwagger from "./swagger.js";
 
-// import UserRoutes from "./routes/User.routes.js";
+import UserRoutes from "./routes/User.routes.js";
 import authRoutes from "./routes/Auth.routes.js";
 
 
@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 })
 
 // Routes
-// app.use("/api/v1/user", UserRoutes);
+app.use("/api/v1/user", UserRoutes);
 app.use("/api/v1/auth", authRoutes);
 
 app.listen(port, async () => {
