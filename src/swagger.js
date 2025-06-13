@@ -5,9 +5,9 @@ const swaggerOptions = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'GullMegler API',
+      title: 'Mobile App Dev Project APIs',
       version: '1.0.0',
-      description: 'API documentation for GullMegler project',
+      description: 'API documentation for MAD Project',
     },
     servers: [
       {
